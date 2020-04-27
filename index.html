@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Main Chat</title>
+<script>
+
+/*
+Шаблон для сообщения:
+
+<div align="left" style="width: 90%; background-color: #919191; padding: 0.5%; margin: 1%">
+<h3 style="color: white">Отправитель</h3>
+<p>Текст сообщения</p>
+</div>
+
+*/
+
+</script>
+<style>
+* {
+padding: 0;
+margin: 0
+}
+</style>
+</head>
+<body style="background-color: #E7E7E7" onLoad="GetMessage()">
+
+<div style="background-color: #BCBCBC; width: 100%; padding: 0.5%">
+
+<h2>Web Chat (сделан с помощью Firebase)</h2>
+
+</div>
+
+<input id="nameInput" type="text" placeholder="Введите имя" style="background-color: white; padding: 0; margin: 0; width: 100%; height: 2em">
+<input id="messageInput" type="text" placeholder="Введите сообщение" style="background-color: white; padding: 0; margin: 0; width: 100%; height: 2em">
+<input type="button" value="Отправить" onClick="SendMessage()" style="background-color: #bdbdbd; padding: 0; margin: 0; width: 100%">
+
+<div id="messagesDiv" align="center">
+
+
+
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/7.14.2/firebase.js"></script>
+<script>
+var firebaseConfig = {
+apiKey: "AIzaSyATbjQEsjCdsTcBSM5FRpc3MG4BTnitURc",
+authDomain: "webchat-40bd1.firebaseapp.com",
+databaseURL: "https://webchat-40bd1.firebaseio.com",
+projectId: "webchat-40bd1",
+storageBucket: "webchat-40bd1.appspot.com",
+messagingSenderId: "148311996168",
+appId: "1:148311996168:web:b988114a2c4b181f6d1ebd",
+measurementId: "G-142QCPJYT3"
+};
+firebase.initializeApp(firebaseConfig);
+firebase.analytics();
+firebase.database();
+</script>
+
+<script>
+
+function SendMessage(){
+
+firebase.database().ref("message").set({
+name: document.getElementById("nameInput").value,
+message: document.getElementById("messageInput").value
+});
+
+}
+
+function GetMessage(){
+
+firebase.database().ref("message/name").once("value", function(name){
+firebase.database().ref("message/message").once("value", function(message){
+
+if(name.val() == null){}
+else{
+
+document.getElementById("messagesDiv").innerHTML = `
+<div align="left" style="width: 90%; background-color: #919191; padding: 0.5%; margin: 1%">
+<h3 style="color: white">` + name.val() + `</h3>
+<p>` + message.val() + `</p>
+</div>`
+
+}
+
+});
+});
+
+setTimeout(GetMessage, 10);
+
+}
+
+</script>
+
+</body>
+</html>
